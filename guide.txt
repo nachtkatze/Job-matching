@@ -1,0 +1,3 @@
+BOTON DE LUPA:
+	en index, SELECT OPTION(~390): al pulsarlo ejecuta selectSearch en mvvm.js.
+	Esto llama a sammy, que redirige a /main/start
