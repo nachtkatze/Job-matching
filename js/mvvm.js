@@ -564,14 +564,16 @@ $(document).ready(function () {
             });
             // console.log(query);
             //console.log(tempURL);
+            
             var finalQuery = endPointSOLR + query + tempURL;
+            console.log('final query is:')
             console.log(finalQuery);
             self.viewData.removeAll();
             self.companiesData.removeAll();
             self.recommendedData.removeAll();
             $.ajax({
                 type: 'post',
-                url: finalQuery,
+                url: /*finalQuery*/mockCandidates,
                 data: {},
                 dataType: 'json',
                 ContentType: 'text/html; charset=UTF-8',
@@ -591,7 +593,7 @@ $(document).ready(function () {
                             type: 'get',
                             //url: 'http://lab.gsi.dit.upm.es/episteme/tomcat/Episteme/CompanyMatcher?offer='+JSON.stringify([SearchJson])+'&entity='+entity_index,
                           //  url: endPointSemanticMatcher+'?offer={"episteme.search.' + searchName + '":' + JSON.stringify([SearchJson]) + '}&entity=' + entity_index,
-							  url: endPointSemanticMatcher+'{"episteme.search.new_search":' + JSON.stringify([SearchJson]) + '}',
+							  url: /*endPointSemanticMatcher+'{"episteme.search.new_search":' + JSON.stringify([SearchJson]) + '}'*/mockSemantic,
                            // data: {
                            //    'json': jsonEmpresas
                            // },
@@ -991,6 +993,32 @@ $(document).ready(function () {
                 self.page(3);
                 self.filter("");
                 self.reload();
+            });
+            //Añadido de prueba - Rule Editor
+            this.get('#/test', function(){
+                /*
+                if (self.status() == 0) {
+                    this.redirect('#/main/' + this.params.offerId);
+                    return;
+                }
+                */
+                self.status(1);
+                self.page(1);
+                self.currentEntity(this.params.entityId);
+                self.doSearch(this.params.entityId);
+                numBoxes = (self.currentSearch.total() - 1);
+                droppwidth = 152 + (numBoxes * 152);
+                $("#droppableElements").css('height', "122px");
+                $("#droppableElements").css('width', droppwidth + "px");
+                self.page(1);
+                $(".controlContainer").fadeIn();
+                $(".dropContainer").hide().fadeIn();
+                $("#droppableElements").css('box-shadow', 'inset 0 0 3px #ccc');
+                $(".menuItemArrow").stop().animate({
+                    marginLeft: "170px"
+                }, 300);
+                self.filter("");
+                self.focusBar(true);
             });
         }).run('#/main/select'); //END SAMMY
         // </CLIENT SIDE ROUTES>
