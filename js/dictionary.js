@@ -6,10 +6,10 @@ languages =
 		m1: "Búsqueda",
 		m2: "Candidatos",
 		m3: "Finalizar",
-		m4: "Cantidatos encontrados",
-                m4b: "Candidato encontrado",
+		m4: "canales disponibles",
+                m4b: "canal disponible",
 		m5: "Ayuda",
-                m5b: "Ayuda de job matching",
+                m5b: "Ayuda de Rule Editor",
 		m6: "Orden alfabético",
 		m7: "Orden semántico",
                 m8: "Notificación de job matching",
@@ -77,7 +77,7 @@ languages =
 		j10:"¿Desea guardar los cambios?",
 		j11:"¡Búsqueda guardada correctamente!",
 
-		k1: "Selecciona buscar un dandidato",
+		k1: "Esta es la ayuda de Rule Editor",
 		k2: "Después puedes proceder a definir la búsqueda. "
                      +"En los campos que aparecen puedes seleccionar las características que quieres que tenga el candidato. "
                      +"Dependiendo del orígen de los datos los campos pueden ser diferentes. "
@@ -93,7 +93,7 @@ languages =
 		province:"Provincia del candidato",
 		type:"Posición",
 		freeText:"Que contenga las palabras",
-		entity:"Entidad",
+		channel:"Canal",
 		selectedEntity:"Candidato seleccionada",
 		RETURN:"BÚSQUEDAS GUARDADAS",
 		SEARCH:"MOSTRAR RESULTADOS",
@@ -124,15 +124,15 @@ languages =
 		m1: "Search",
 		m2: "Candidates",
 		m3: "Finalize",
-		m4: "candidates found",
-		m4b: "candidate found",
+		m4: "available channels",
+		m4b: "available channel",
 		m5: "Help",
 		m6: "Alphabetical order",
 		m7: "Semantic order",
                 m8: "job matching notification",
                 m9: "Calculating semantic order...",
 		m10: "Loading results...",
-		m5b: "job matching help",
+		m5b: "Rule Editor help",
 		b1: "Refine search by name...",
 		b2: "Filter by category",
 		b3: "Apply filters",
@@ -195,7 +195,7 @@ languages =
 		j10:"Do you want to save the changes?",
 		j11:"Search saved correctly!",
 
-		k1: "First select if you want to find a candidateor create a consortium. You can select one stored or create a new one. ",
+		k1: "This is the Rule Editor help",
 		k2: "Then you can proceed to define the search. "
                       + "In the fields that appear you can select the features you want to have the entity. "
                       + "Depending on the origin of the data fields can be different. "
@@ -211,7 +211,7 @@ languages =
 		province:"Candidate province",
 		type:"Candidate type",
 		freeText:"Containing the following words",
-		entity:"Candidate",
+		channel:"Channel",
 		selectedEntity:"Selected candidate",
 		RETURN:"SAVED SEARCHES",
 		SEARCH:"SEARCH RESULTS",

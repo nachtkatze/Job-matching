@@ -239,10 +239,11 @@ $(document).ready(function () {
             }
         };
         //initial functions
+        /* No las quiero, son parte de busqueda
         loadSkills('gsi');
         loadProvinces('gsi');
         loadTypes('gsi');
-        
+        */
         loadSearches();
         self.hideElement = function (elem) {
             alert('eo');
@@ -387,10 +388,12 @@ $(document).ready(function () {
                 self.reload();
             }
         };
+        //Se ejecuta cuando le das al simobo '?' de un cubito
         self.activateHelp = function (type, value) {
             self.offerDetails([]);
             self.offerDetailsSkills([]);
             self.helpText(false);
+            /*
             if (type == "offer") {
                 $.ajax({
                     type: 'GET',
@@ -457,6 +460,7 @@ $(document).ready(function () {
                     async: false
                 });
             }
+            */
             $('table tr:even').addClass('zebra_stripe');
             if (type == "help") {
                 self.helpText(true);
@@ -532,6 +536,7 @@ $(document).ready(function () {
             var entity_index = entityIndex;
             var tempURL = "";
             var query = "";
+           /*
             ko.utils.arrayFilter(self.currentSearch.result()[entity_index].solr(), function (item) {
                 //console.log(item);
                 // Hacemos AND para diferentes propiedades y OR para los que estén activos dentro de una misma propiedad
@@ -561,13 +566,11 @@ $(document).ready(function () {
                         query = '&q=*:*'
                     }
                 }
-            });
+            });*/
             // console.log(query);
             //console.log(tempURL);
             
             var finalQuery = endPointSOLR + query + tempURL;
-            console.log('final query is:')
-            console.log(finalQuery);
             self.viewData.removeAll();
             self.companiesData.removeAll();
             self.recommendedData.removeAll();
@@ -586,9 +589,10 @@ $(document).ready(function () {
                         
                         $.growlUI(self.lang().m8 + ':', self.lang().m9);
                         var jsonEmpresas = JSON.stringify(parsedJSON);
+                        /*
                         var unmapped = ko.mapping.toJS(self.currentSearch);
                         var SearchJson = unmapped;
-                        var searchName = self.currentSearch.name();
+                        var searchName = self.currentSearch.name();*/
                         $.ajax({
                             type: 'get',
                             //url: 'http://lab.gsi.dit.upm.es/episteme/tomcat/Episteme/CompanyMatcher?offer='+JSON.stringify([SearchJson])+'&entity='+entity_index,
@@ -630,7 +634,8 @@ $(document).ready(function () {
                                 self.reload();
                             })
                         });
-                    } else {
+                    } 
+                    else {
                         for(var i=0; i < parsedJSON.length; i++){
                             parsedJSON[i]["weight"] = "Off";
                         }
@@ -647,6 +652,88 @@ $(document).ready(function () {
                 })
             });
         };
+
+        /*
+        *   Cambio la funcion doSearch por esta, mas adecuada para rule editor
+        */
+        self.getChannels = function() {
+            self.loading('true'); //No entiendo bien por que
+            $.blockUI(); //Muestra pantalla de carga
+            //Realizar peticion de canales
+            //var success = false;
+            $.ajax({
+                type: 'get',
+                url: mockCandidates,
+                data: {},
+                dataType: 'json',
+                ContentType: 'text/html; charset=UTF-8',
+                success: function(allData) {
+                    data = JSON.stringify(allData.response.docs);
+                    var parsedJSON = JSON.parse(data);
+
+                    for(var i=0; i < parsedJSON.length; i++){
+                            parsedJSON[i]["weight"] = "Off";
+                        }
+
+                    $.growlUI(self.lang().m8 + ':', self.lang().m9);
+                    var jsonEmpresas = JSON.stringify(parsedJSON);
+     
+                    $.ajax({
+                        type: 'get',   
+                        url: mockSemantic,
+                        data: {},
+                        dataType: 'json',
+                        ContentType: 'text/html; charset=UTF-8',
+                        success: function (allDatos) {
+                            //success = true;
+                            data = JSON.stringify(allDatos);
+                            var semanticJson = JSON.parse(data);
+                            var parsedJSON = JSON.parse(jsonEmpresas);
+                            dataParsed = parsedJSON;
+
+                            //Crea la propiedad weight, usando el sim del resultado semantico
+                            for(var i=0; i < parsedJSON.length; i++){
+                                var uri = parsedJSON[i]["lmf.uri"];
+                                for(var j = 0; j < semanticJson.length; j++){
+                                    if(semanticJson[j]["uri"] == uri){
+                                    parsedJSON[i]["weight"] = semanticJson[j]["sim"];
+                                    break;
+                                    }
+                                }
+                             }
+                                                                      
+                            self.semanticOrder(true);
+                            ko.mapping.fromJS(parsedJSON, self.companiesData);
+                            ko.mapping.fromJS(parsedJSON, self.viewData);
+                            ko.mapping.fromJS(parsedJSON, self.recommendedData);
+                            self.recommendedData.sortByNumberAsc('Ranking');
+                            self.viewData.sortByNumberAsc('weight');
+
+                            $(".dragContainer").hide().fadeIn();
+                            self.reload();
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+    
+                    });
+                    /*
+                    if (!success){
+                        console.log("No se hace la segunda peticion");
+
+                        self.semanticOrder(false);
+                        ko.mapping.fromJS(parsedJSON, self.companiesData);
+                        ko.mapping.fromJS(parsedJSON, self.viewData);
+                        ko.mapping.fromJS(parsedJSON, self.recommendedData);
+                        self.recommendedData.sortByNumberAsc('Ranking');
+                        self.viewData.sortByPropertyAsc('name');                        
+                        $(".dragContainer").hide().fadeIn();
+                        self.reload();
+                    }*/
+                }
+            });
+        }
+
         self.doSaveJSON = function () {
             if(!demoMode){
                 self.currentSearch.changed('false');
@@ -687,14 +774,18 @@ $(document).ready(function () {
                 url_data: '#/main/new_search'
             });
         };
+        // Se llama -al menos- cuando se le da al cartel 'rule editor'
         self.selectSearch = function (place) {
-            self.status(0);
+            //self.status(0);
+            console.log("Se llama al metodo selectSearch ya quitado");
+            /*
             if (self.currentSearch.changed() == 'false' || self.option() == 1) {
                 sammyPlugin.trigger('redirectEvent', {
                     url_data: '#/main/' + place
                 });
                 return;
-            }
+            }*/
+            /*
             changesModal(function (result) {
                 if (result) {
                     self.doSaveJSON();
@@ -707,6 +798,7 @@ $(document).ready(function () {
                     });
                 }
             });
+            */
         };
         self.doDeleteJSON = function (item) {
             if(!demoMode){
@@ -737,7 +829,7 @@ $(document).ready(function () {
             }
         };
         self.getSearchJSON = function (name) {
-            $.getJSON(endPointJSON + "episteme.search." + name, function (searchData) {
+            $.getJSON(/*endPointJSON + "episteme.search." + name*/mockSearchData, function (searchData) {
                 console.log(searchData['episteme.search.' + name]);
                 var searchDatos = searchData['episteme.search.' + name];
                 var parsedJSON = JSON.parse(searchDatos);
@@ -819,6 +911,7 @@ $(document).ready(function () {
             $('.solrInput').val('');
         };
         /* Función que carga del endpoint la lista de skills */
+        /*
         function loadSkills(graph) {
             templateSkills = []
             var graphINIT = ''
@@ -840,7 +933,9 @@ $(document).ready(function () {
                 self.Skill(unique);
             });
         }
+        */
         /* Función que carga del endpoint la lista de provinces */
+        /*
         function loadProvinces(graph) {
             templateProvinces = []
             var graphINIT = ''
@@ -862,7 +957,9 @@ $(document).ready(function () {
                 self.Province(unique);
             });
         }
+        */
         /* Función que carga del endpoint la lista de types */
+        /*
         function loadTypes(graph) {
             templateTypes = []
             var graphINIT = ''
@@ -884,12 +981,14 @@ $(document).ready(function () {
                 self.Type(unique);
             });
         }
+        */
         // <CLIENT SIDE ROUTES>
         sammyPlugin = $.sammy(function () {
             this.bind('redirectEvent', function (e, data) {
                 this.redirect(data['url_data']);
             });
             //MAIN
+            /*
             this.get('#/main/:param', function (context) {
                 if (this.params.param == '') {
                     this.redirect('#/main/start');
@@ -934,7 +1033,7 @@ $(document).ready(function () {
                 self.filter("");
                 self.focusBar(true);
                 self.reload();
-            });
+            });*/
             //COMPOSER
             this.get('#/composer/:offerId/entity/:entityId', function (context) {
                 if (self.status() == 0) {
@@ -995,17 +1094,20 @@ $(document).ready(function () {
                 self.reload();
             });
             //Añadido de prueba - Rule Editor
-            this.get('#/test', function(){
+            this.get('#/editor', function(){
                 /*
                 if (self.status() == 0) {
                     this.redirect('#/main/' + this.params.offerId);
                     return;
                 }
                 */
+                self.getSearchJSON(0.49664612486958504);           
                 self.status(1);
                 self.page(1);
-                self.currentEntity(this.params.entityId);
-                self.doSearch(this.params.entityId);
+                self.option(0); //pone los candidatos en forma de cubitos
+                self.currentEntity(/*this.params.entityId*/'0');
+                //self.doSearch(/*this.params.entityId*/'0');
+                self.getChannels();
                 numBoxes = (self.currentSearch.total() - 1);
                 droppwidth = 152 + (numBoxes * 152);
                 $("#droppableElements").css('height', "122px");
@@ -1020,7 +1122,7 @@ $(document).ready(function () {
                 self.filter("");
                 self.focusBar(true);
             });
-        }).run('#/main/select'); //END SAMMY
+        }).run('#/editor'); //END SAMMY
         // </CLIENT SIDE ROUTES>
     } //End model
     // Activates knockout.js

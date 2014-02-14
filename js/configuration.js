@@ -8,3 +8,4 @@ endPointSemanticMatcher = "http://demos.gsi.dit.upm.es/gsimatch/rest/job/search?
 
 mockCandidates = "http://localhost:7878/candidates";
 mockSemantic = "http://localhost:7878/semantic";
+mockSearchData = "http://localhost:7878/searchData";

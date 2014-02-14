@@ -227,10 +227,20 @@ body {
   margin-top:20px;
   cursor:default;
 }
-#droppableElements{
+#droppableElementsLeft{
   width: 0px; 
   height: 122px; 
-  display: inline-block;
+  display: inline-table;
+  position:relative;
+  background-color: #E8E8E8;
+  box-shadow:inset 0 0 3px #ccc;
+  border-radius: 5px;
+  margin-right: 290px
+}
+#droppableElementsRight{
+  width: 0px; 
+  height: 122px; 
+  display: inline-table;
   position:relative;
   background-color: #E8E8E8;
   box-shadow:inset 0 0 3px #ccc;
@@ -257,6 +267,12 @@ text-align: center;
 font-size: 15px;
 text-shadow: 1px 1px 0 #EEE;
 margin:10px;
+}
+#droppable1{
+  float: left;
+}
+#droppable2{
+  float: right;
 }
 .droppable.selected{ 
   color: #555;
@@ -1414,6 +1430,10 @@ height: 80px;
 
 .colorBlue {
   color: #0099ff;
+}
+
+.colorGreen {
+  color: #00CC66;
 }
 
 .recommendedText{

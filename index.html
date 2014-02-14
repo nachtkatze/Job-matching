@@ -44,14 +44,14 @@
     <div id="container">
         <div id="header">
 	    <div id = "logo">
-		<a href="#" data-bind="click: $root.selectSearch.bind($data,'select')">
-                <div class="epistemeLogo titleText">job <span class="colorBlue">matching</span></div>
+		<a href="#" data-bind="click: $root.changeURL.bind($data,'#/editor')">
+                <div class="epistemeLogo titleText">rule <span class="colorGreen">editor</span></div>
                 </a>
 		<br class="clear" />
             </div>
 
 	    <div  id = "menuBar" data-bind="visible: page() < 3">
-	        <div  class = "menuBarItem" data-bind="css: { inactive: status() < 1, selected: page() == 0 }">
+	        <div  class = "menuBarItem" data-bind="visible: false, css: { inactive: status() < 1, selected: page() == 0 }">
 		  <a data-bind="attr: {'href': '#/main/' + $root.currentSearch.id()}">
 		  <div class = "menuItemIcon ">
                     <img src="images/opportunity.svg" />
@@ -60,7 +60,7 @@
 		  <div class = "menuItemArrow"></div>
 		  </a>
 		</div>
-		<div  class = "menuBarItem" data-bind="css: { inactive: status() < 1, selected: page() == 1 }">
+		<div  class = "menuBarItem" data-bind="visible: false, css: { inactive: status() < 1, selected: page() == 1 }">
 		  <a data-bind="attr: {'href': '#/composer/' + $root.currentSearch.id() + '/entity/'+$root.currentEntity()}">
 		  <div class = "menuItemIcon ">
                     <img src="images/company.svg" />
@@ -68,7 +68,7 @@
 		  <div class = "menuItemText"><span data-bind="text: lang().m2"></span></div>
 		  </a>
 		</div>
-		<div  class = "menuBarItem" data-bind="css: { inactive: $root.currentSearch.completed() != 'true',  selected: page() == 2 }">
+		<div  class = "menuBarItem" data-bind="visible: false, css: { inactive: $root.currentSearch.completed() != 'true',  selected: page() == 2 }">
 		  <a href="#/finalize">
 		  <div class = "menuItemIcon ">
                     <img src="images/finalize.svg" />
@@ -84,6 +84,7 @@
 		  <div class = "menuItemText"><span data-bind="text: lang().m5"></span></div>
 		  </a>
 		</div>
+    <!--
 		<div  class = "selectedOffer" data-bind="visible: page() > 0.5 && option() != 1, click: $root.loadComposeSearch.bind($data, $root.currentSearch.id()), clickBubble: false">
                   <div class="logoContainer">
                     <img class="defaultLogo" data-bind="attr: { 'src': './images/offers/' + $root.currentSearch.logo() + '.png' }"/>
@@ -92,6 +93,7 @@
         	    <p class="draggableText" data-bind="text: $root.currentSearch.name()"></p>
       		  </div>
 		</div>
+  -->
 	    </div>
 	    <div  id = "langBar" >
 	        <a href="#" data-bind="click: changeLanguage.bind($data,'0')">
@@ -114,14 +116,14 @@
 <div class="dropContainer" data-bind="css: { offerContainer: page() == 0 }" >
     <!-- COMPOSER -->
     <!-- ko if: option() == 0 -->
-    <div id="droppableElements" data-bind="visible: page() == 1" >
+    <div id="droppableElementsLeft" data-bind="visible: true" >
 
         <div data-bind="foreach: $root.currentSearch.result">
-	 <div class="droppable droppableCompany company" class="class2" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableCompany': $data.entityName() != '', 'draggableEmpty': $data.entityName() == ''}">
+	 <div class="droppable droppableCompany company" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableCompany': $data.entityName() != '', 'draggableEmpty': $data.entityName() == ''}">
 
            
 	   <!-- ko if: $data.entityName() == '' -->
-   	   <div class ="droppableText"> <span data-bind="text: $root.lang().d2+' '+$root.lang().entity+' '+($index()+1)"></span> </div>
+   	   <div class ="droppableText"> <span data-bind="text: $root.lang().d2+' '+$root.lang().channel+' '+($index()+1)"></span> </div>
 	   <!-- /ko -->
 
            <!-- ko if: $data.entityName() != '' --> 
@@ -137,14 +139,42 @@
                <p class="draggableText" data-bind="text: $data.entityName()"></p>
            </div>
            <!-- /ko -->
-
-
 	 </div>
-	</div>
-        <div class="lines" id="lines" data-bind="if: page() == 1">
-		<img class="img" data-bind="attr: { 'src': lang().i1 }">
-	</div>
+	</div>  
+    <div class="lines" id="lines" data-bind="if: page() == 1">
+		  <img class="img" data-bind="attr: { 'src': lang().i1 }">
+	  </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: option() == 0 -->
+    <div id="droppableElementsRight" data-bind="visible: true" >
 
+        <div data-bind="foreach: $root.currentSearch.result">
+   <div class="droppable droppableCompany company" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableCompany': $data.entityName() != '', 'draggableEmpty': $data.entityName() == ''}">
+
+           
+     <!-- ko if: $data.entityName() == '' -->
+       <div class ="droppableText"> <span data-bind="text: $root.lang().d2+' '+$root.lang().channel+' '+($index()+2)"></span> </div>
+     <!-- /ko -->
+
+           <!-- ko if: $data.entityName() != '' --> 
+           <div class="droppedLogoContainer">
+               <!-- ko if: $data.entityLogo() != '' -->
+               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.entityLogo() }"/>
+               <!-- /ko -->
+               <!-- ko if: $data.entityLogo() == '' -->
+               <img class="defaultLogo" src="images/default.png"/>
+               <!-- /ko -->
+           </div>
+           <div class="textContainer">
+               <p class="draggableText" data-bind="text: $data.entityName()"></p>
+           </div>
+           <!-- /ko -->
+   </div>
+  </div>  
+    <div class="lines" id="lines" data-bind="if: page() == 1">
+      <img class="img" data-bind="attr: { 'src': lang().i1 }">
+    </div>
     </div>
     <!-- /ko -->
     <!-- FINALIZE -->
@@ -354,6 +384,7 @@
 
 
 <!-- CONTROL -->
+<!-- esto si que me interesa -->
 <div class="controlContainer">
     <div id="filterBtn" data-bind="visible: false">
     <a class="category" href="#" data-filter-by-category="true"> <span data-bind="text: lang().b2"></span> </a>
@@ -457,6 +488,7 @@
   <!-- /ko -->
 
   <!-- SEARCH RESULT -->
+
   <div data-bind="foreach: filteredData, beforeRemove: hideElement, css: { content: page() == 1}">
     <!-- ko if: $root.page() == 1 && $root.option() == 1 -->
     <div id="draggable" class="draggable clickableCompanies semanticCompanies" data-bind="attr: { 'name': $data.name, 'province': $data.Province}">
@@ -480,6 +512,7 @@
 
   <!-- /SEARCH RESULT -->
   <!-- COMPANIES NETWORK RESULT -->
+  <!-- self.option() == 0 para que salgan los cubitos; ESTOS SON LOS CUBITOS PRINCIPALES - OSCAR -->
   <div data-bind="foreach: filteredData, beforeRemove: hideElement, visible: page() == 1 && option() == 0, css: { content: page() == 1}">
     <!-- ko if: $root.page() == 1 && $root.option() == 0 -->
     <div id="draggable" class="draggable draggableCompanies semanticCompanies" data-bind="attr: { 'name': $data.name, 'province': $data.Province}">
@@ -604,9 +637,11 @@
         <div data-bind="if: $root.helpText">
           <h1 data-bind="text: lang().m5b"></h1>
           <h2>1.-<span data-bind="text: $root.lang().k1"></h2><br>
+          <!--
           <h2>2.-<span data-bind="text: $root.lang().k2"></h2><br>
           <h2>3.-<span data-bind="text: $root.lang().k3"></h2><br>
           <h2>4.-<span data-bind="text: $root.lang().k4"></h2><br>
+        -->
         </div>
         <!--OFFER DETAILS MODAL-->
         <div data-bind="foreach: offerDetails">
