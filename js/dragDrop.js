@@ -17,14 +17,31 @@ function OnloadFunction() {
     $(".clickableRecommended").click(function() {
       clickAction($(this));
     });
-    //DROPPABLE COMPANIES
+    //DROPPABLE COMPANIES 
+    
     $(".droppableCompany").droppable({
         accept: ".draggable",
         drop: function (event, ui) {
-            dropAction($(ui.helper), $(this));
+            dropAction($(ui.helper), $(this), undefined);
             console.log("company drop");
         }
     });
+    
+    $(".droppableContainerLeft").droppable({
+        accept: ".draggable",
+        drop: function(event, ui)  {
+            dropAction($(ui.helper), $(this), 'left');
+            console.log("Container left drop")
+        }
+    });
+    $(".droppableContainerRight").droppable({
+        accept: ".draggable",
+        drop: function(event, ui)  {
+            dropAction($(ui.helper), $(this), 'right');
+            console.log("Container right drop")
+        }
+    })
+
     $.each($('.droppableCompany'), function () {
         if ($(this).hasClass('stateDisabled')) {
             $(this).droppable("disable");
@@ -44,6 +61,33 @@ function OnloadFunction() {
             stopCompanyAction($(ui.helper), $(this));
         }
     });
+
+    $(".draggableContainerLeft").draggable({
+        helper: "clone",
+        start: function (event, ui) {
+            $(ui.helper).css('box-shadow', ' 0 0 40px #999');
+            $(ui.helper).css('z-index', '999');
+            $(ui.helper).addClass("dragged");
+        },
+        stop: function (event, ui) {
+            console.log("dragged from left container");
+            stopCompanyAction($(ui.helper), $(this), 'left');
+        }
+    });
+
+    $(".draggableContainerRight").draggable({
+        helper: "clone",
+        start: function (event, ui) {
+            $(ui.helper).css('box-shadow', ' 0 0 40px #999');
+            $(ui.helper).css('z-index', '999');
+            $(ui.helper).addClass("dragged");
+        },
+        stop: function (event, ui) {
+            console.log("dragged from right container");
+            stopCompanyAction($(ui.helper), $(this), 'right');
+        }
+    });
+
     $.each($('.draggableCompany'), function () {
         if ($(this).hasClass('stateDisabled')) {
             $(this).draggable("disable");
@@ -53,23 +97,45 @@ function OnloadFunction() {
     });
     //WHEN A COMPANY IS DRAGGED FROM DROPPABLE
 
-    function stopCompanyAction($helper, $original) {
-        var dropIndex = $original.attr('index');
-        self.currentSearch.result()[dropIndex].entityName('');
+    function stopCompanyAction($helper, $original, side) {
+        var dropIndex = 0; //There is only one element in the array of containers
+        if(side == 'left'){
+            self.containerLeft.container()[dropIndex].containerName('');
+            self.containerLeft.container()[dropIndex].containerLogo('');
+        }
+        if(side == 'right'){
+            self.containerRight.container()[dropIndex].containerName('');
+            self.containerRight.container()[dropIndex].containerLogo('');
+        }
+        /*
         self.currentSearch.result()[dropIndex].entityLogo('');
         self.currentSearch.changed('true');
         self.currentSearch.completed('false');
         $original.removeClass("draggableCompany");
+        */
     }
     //WHEN A COMPANY IS DROPPED
 
-    function dropAction($drag, $drop) {
+    function dropAction($drag, $drop, side) {
         self.currentSearch.changed('true');
-        var compName = $drag.find('.draggableText').text()
-        var compLogo = $drag.find('.defaultLogo').attr('src');
-        var dropIndex = $drop.attr('index');
+        var channelName = $drag.find('.draggableText').text()
+        var channelLogo = $drag.find('.defaultLogo').attr('src');
+        var dropIndex = 0; //There is only one element in the array of containers
+        if(side == 'left'){
+            self.containerLeft.container()[dropIndex].containerName(channelName);
+            self.containerLeft.container()[dropIndex].containerLogo(channelLogo);
+        }if(side == 'right'){
+            self.containerRight.container()[dropIndex].containerName(channelName);
+            self.containerRight.container()[dropIndex].containerLogo(channelLogo);
+        }
+        OnloadFunction();
+        self.showTriggers(channelName);
+        //var dropIndex = /*$drop.attr('index')*/index;
+        /*
         self.currentSearch.result()[dropIndex].entityName(compName);
         self.currentSearch.result()[dropIndex].entityLogo(compLogo);
+        */
+        /*
         var nextEntity = $('.draggableEmpty').attr('index')
         if (nextEntity == undefined) {
             self.currentSearch.completed('true');
@@ -84,10 +150,12 @@ function OnloadFunction() {
             });
             return;
         }
+
         self.currentSearch.completed('false');
         sammyPlugin.trigger('redirectEvent', {
             url_data: '#/composer' + '/' + self.currentSearch.name() + '/entity/' + nextEntity
         });
+        */
     }
 
     //WHEN A COMPANY IS CLICKED

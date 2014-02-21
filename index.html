@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/fonts.css" type="text/css" media="screen">
     <!-- javascript libs-->
     <script type="text/javascript" src="js/lib/jquery-1.8.2.js"></script>
-    <script type="text/javascript" src="js/lib/jquery-ui-1.9.1.custom.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="js/lib/jquery.ui.touch-punch.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.pajinate.js"></script>
     <script type="text/javascript" src="js/lib/kendo.web.min.js"></script>
@@ -24,7 +24,8 @@
     <script type="text/javascript" src="js/lib/sammy-latest.min.js" ></script>
     <script type="text/javascript" src="js/lib/knockout-kendo.min.js"></script>
     <script type="text/javascript" src="js/lib/jquery.confirm.js"></script>
-    <script type="text/javascript" src="js/lib/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.blockUI.js"></script>   
+    
     <!-- javascript custom-->
     <script type="text/javascript" src="js/configuration.js" ></script>
     <script type="text/javascript" src="js/dictionary.js" ></script>
@@ -34,6 +35,7 @@
     <script type="text/javascript" src="js/modal.js"></script>
     <script type="text/javascript" src="js/mvvm.js"></script>
 
+    
     <link rel="icon" href="images/favicon.ico" type="image/x-icon"> 
     
 	<title>GSI Semantic Searcher</title>
@@ -118,25 +120,25 @@
     <!-- ko if: option() == 0 -->
     <div id="droppableElementsLeft" data-bind="visible: true" >
 
-        <div data-bind="foreach: $root.currentSearch.result">
-	 <div class="droppable droppableCompany company" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableCompany': $data.entityName() != '', 'draggableEmpty': $data.entityName() == ''}">
+        <div data-bind="foreach: $root.containerLeft.container">
+	 <div class="droppable droppableCompany company droppableContainerLeft" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerLeft': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
 
            
-	   <!-- ko if: $data.entityName() == '' -->
+	   <!-- ko if: $data.containerName() == '' -->
    	   <div class ="droppableText"> <span data-bind="text: $root.lang().d2+' '+$root.lang().channel+' '+($index()+1)"></span> </div>
 	   <!-- /ko -->
 
-           <!-- ko if: $data.entityName() != '' --> 
+           <!-- ko if: $data.containerName() != '' --> 
            <div class="droppedLogoContainer">
-               <!-- ko if: $data.entityLogo() != '' -->
-               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.entityLogo() }"/>
+               <!-- ko if: $data.containerLogo() != '' -->
+               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.containerLogo() }"/>
                <!-- /ko -->
-               <!-- ko if: $data.entityLogo() == '' -->
+               <!-- ko if: $data.containerLogo() == '' -->
                <img class="defaultLogo" src="images/default.png"/>
                <!-- /ko -->
            </div>
            <div class="textContainer">
-               <p class="draggableText" data-bind="text: $data.entityName()"></p>
+               <p class="draggableText" data-bind="text: $data.containerName()"></p>
            </div>
            <!-- /ko -->
 	 </div>
@@ -149,25 +151,25 @@
     <!-- ko if: option() == 0 -->
     <div id="droppableElementsRight" data-bind="visible: true" >
 
-        <div data-bind="foreach: $root.currentSearch.result">
-   <div class="droppable droppableCompany company" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableCompany': $data.entityName() != '', 'draggableEmpty': $data.entityName() == ''}">
+        <div data-bind="foreach: $root.containerRight.container">
+   <div class="droppable droppableCompany company droppableContainerRight" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index+1}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerRight': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
 
            
-     <!-- ko if: $data.entityName() == '' -->
+     <!-- ko if: $data.containerName() == '' -->
        <div class ="droppableText"> <span data-bind="text: $root.lang().d2+' '+$root.lang().channel+' '+($index()+2)"></span> </div>
      <!-- /ko -->
 
-           <!-- ko if: $data.entityName() != '' --> 
+           <!-- ko if: $data.containerName() != '' --> 
            <div class="droppedLogoContainer">
-               <!-- ko if: $data.entityLogo() != '' -->
-               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.entityLogo() }"/>
+               <!-- ko if: $data.containerLogo() != '' -->
+               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.containerLogo() }"/>
                <!-- /ko -->
-               <!-- ko if: $data.entityLogo() == '' -->
+               <!-- ko if: $data.containerLogo() == '' -->
                <img class="defaultLogo" src="images/default.png"/>
                <!-- /ko -->
            </div>
            <div class="textContainer">
-               <p class="draggableText" data-bind="text: $data.entityName()"></p>
+               <p class="draggableText" data-bind="text: $data.containerName()"></p>
            </div>
            <!-- /ko -->
    </div>
@@ -177,13 +179,11 @@
     </div>
     </div>
     <!-- /ko -->
-    <!-- FINALIZE -->
     <div id="finalizeElements" data-bind="visible: page() == 2" >
        <div id="finalizeContainer" class="finalizeContainer" data-bind="visible: page() == 2">
 
           <h2> <span data-bind="text: lang().f1"></span> </h2>
           <p><span data-bind="text: lang().f6"></span></p>
-
 <!-- ko foreach: $root.currentSearch.result -->
   <div>
     <div class="finalize filter">
@@ -299,7 +299,7 @@
     <div class="filter" data-bind="visible: $data.entityName() != ''">
       <div class="filterHeader">
         <div class="filterName" ><span data-bind="text: $root.lang().selectedEntity"></span>:</div>
-        <span class="selectedEntityName" data-bind="text: $data.entityName()"></span>
+        <span class="entityName" data-bind="text: $data.entityName()"></span>
         <br>
       </div>
     </div>
@@ -736,6 +736,19 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL TRIGGER SELECTOR -->
+<!-- ko if: selectingTrigger() -->
+<div id="dialog-modal" data-bind="visible: false">
+  <label class="triggerSelect">
+  <select class="triggerSelect-box" data-bind="options: $root.selectedChannel, value: $root.selectedTrigger, optionsText: function (trigger){return trigger.name()} "></select>
+  </label>
+
+  <p data-bind="text: 'You have selected '+ $root.selectedTrigger().name()"></p>
+
+</div>
+<!-- /ko -->
+
 </body>
 
 </html>

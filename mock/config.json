@@ -5,8 +5,8 @@
   "port": "7878",
   "latency": 50,
   "webServices": {
-    "candidates": {
-      "mockFile": "candidates.json",
+    "channels": {
+      "mockFile": "channels.json",
       "latency": 0,
       "verbs": ["all"]
     },

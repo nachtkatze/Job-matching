@@ -1454,3 +1454,37 @@ height: 80px;
   -o-filter: grayscale(100%);
   filter: gray;
 }
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog { 
+  border-radius: 8px 8px 8px 8px; border-width: 8px 8px 8px 8px;
+  border-color: #66A67C;
+}
+
+.ui-dialog-titlebar {
+  background: #00B800;
+  border: #00B800;
+}
+
+.triggerSelect {
+  font-size: 15px;
+}
+
+.triggerSelect-box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 200px;
+  height: 30px;
+}
+
+.triggerSelect select {
+  display: inline-block;
+  padding: 4px 3px 3px 5px;
+  margin: 10px;
+  font: inherit;
+  background: transparent;
+  line-height: 1.2;
+  border:0;
+}

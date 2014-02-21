@@ -6,6 +6,9 @@ endPointJSON = "http://demos.gsi.dit.upm.es/lmf/config/data/";
 
 endPointSemanticMatcher = "http://demos.gsi.dit.upm.es/gsimatch/rest/job/search?q=";
 
-mockCandidates = "http://localhost:7878/candidates";
+// URLs belonging to rule editor
+mockCandidates = "http://localhost:7878/channels";
+
 mockSemantic = "http://localhost:7878/semantic";
+
 mockSearchData = "http://localhost:7878/searchData";

@@ -44,7 +44,7 @@ function createOfferModal(result) {
         }
     });
 };
-
+// Used when an object is dragged
 function finalizeModal(result) {
     $.confirm({
         'title': self.lang().j5,

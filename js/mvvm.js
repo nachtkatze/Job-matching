@@ -111,8 +111,78 @@ $(document).ready(function () {
                     }
                 ]
             },
+            /*
+            {
+                "id": 2,
+                "entityName": "",
+                "entityLogo": "",
+                "provenance": "gsi",
+                "isSemantic": "true",
+                "semantic": [],
+                "solr": [{
+                        "name": "hidden",
+                        "field": "Provenance",
+                        "type": "comboBox",
+                        "values": ["gsi"]
+                    }, {
+                        "name": "province",
+                        "field": "Province",
+                        "type": "autoComplete",
+                        "values": []
+                    }, {
+                        "name": "type",
+                        "field": "Type",
+                        "type": "comboBox",
+                        "values": []
+                    }, {
+                        "name": "travel",
+                        "field": "Travel",
+                        "type": "comboBox",
+                        "values": []
+                    }, {
+                        "name": "freeText",
+                        "field": "Description",
+                        "type": "inputText",
+                        "values": []
+                    }
+                ]
+            }*/
         ]
     }
+    //Template for identifying containers
+    /*
+    templateContainers = {
+        "container": [{
+                "id": "left",
+                "containerLogo": "",
+                "containerName": ""
+            },
+            {
+                "id": "right",
+                "containerLogo": "",
+                "containerName": ""
+            }
+        ]
+
+    }
+    */
+
+    templateContainerLeft = {
+        "container": [{
+            "id": "left",
+            "containerName": "",
+            "containerLogo": ""
+        }]
+    }
+
+    templateContainerRight = {
+        "container": [{
+            "id": "right",
+            "containerName": "",
+            "containerLogo": ""
+        }]
+    }
+
     templateEntity = {
         "id": 2,
         "entityName": "",
@@ -205,6 +275,8 @@ $(document).ready(function () {
         self.companyDetails = ko.mapping.fromJS(templateJson);
         self.companyDetailsSkills = ko.mapping.fromJS(templateJson);
         self.currentSearch = ko.mapping.fromJS(templateSelectedSearch)
+        self.containerLeft = ko.mapping.fromJS(templateContainerLeft);
+        self.containerRight = ko.mapping.fromJS(templateContainerRight);
         self.currentEntity = ko.observable(0);
         self.currentSearches = ko.mapping.fromJS(templateSearches)
         self.newSkillName = ko.observable("");
@@ -219,6 +291,12 @@ $(document).ready(function () {
         self.Province = ko.observableArray(templateProvinces);
         self.selectedProvince = ko.observable("");
         self.selectedDescription = ko.observable("");
+
+        // Used for showing triggers when a channel is selected
+        self.selectedChannel = ko.observableArray(templateJson);
+        self.selectedTrigger = ko.observable('');
+        self.selectingTrigger = ko.observable(false);
+        self.language
         
         /* Añadido de travel */
         self.Travel = ko.observableArray(["true","false"]);
@@ -528,6 +606,7 @@ $(document).ready(function () {
         };
         $(document).ajaxStart(function () {});
         $(document).ajaxStart(function () {});
+        
         self.doSearch = function (entityIndex) {
             self.loading('true');
             $.blockUI();
@@ -536,7 +615,7 @@ $(document).ready(function () {
             var entity_index = entityIndex;
             var tempURL = "";
             var query = "";
-           /*
+           
             ko.utils.arrayFilter(self.currentSearch.result()[entity_index].solr(), function (item) {
                 //console.log(item);
                 // Hacemos AND para diferentes propiedades y OR para los que estén activos dentro de una misma propiedad
@@ -566,7 +645,7 @@ $(document).ready(function () {
                         query = '&q=*:*'
                     }
                 }
-            });*/
+            });
             // console.log(query);
             //console.log(tempURL);
             
@@ -589,10 +668,10 @@ $(document).ready(function () {
                         
                         $.growlUI(self.lang().m8 + ':', self.lang().m9);
                         var jsonEmpresas = JSON.stringify(parsedJSON);
-                        /*
+                
                         var unmapped = ko.mapping.toJS(self.currentSearch);
                         var SearchJson = unmapped;
-                        var searchName = self.currentSearch.name();*/
+                        var searchName = self.currentSearch.name();
                         $.ajax({
                             type: 'get',
                             //url: 'http://lab.gsi.dit.upm.es/episteme/tomcat/Episteme/CompanyMatcher?offer='+JSON.stringify([SearchJson])+'&entity='+entity_index,
@@ -601,6 +680,7 @@ $(document).ready(function () {
                            // data: {
                            //    'json': jsonEmpresas
                            // },
+                           
                             dataType: 'json',
                             ContentType: 'text/html; charset=UTF-8',
                             success: (function (allData) {
@@ -652,6 +732,52 @@ $(document).ready(function () {
                 })
             });
         };
+
+        /*
+            Function called when a channel is dropped into a container
+        */
+        self.showTriggers = function(channel) {
+
+            // Searches the uri of the dragged channel, and saves it into selectedChannel
+            var nameIndex = 0;
+            for(n in self.viewData()){
+                if( self.viewData()[n].name()[nameIndex] == [channel] ) {
+                    self.selectedChannel = ko.mapping.fromJS( self.viewData()[n]['triggers'] );
+                    self.selectingTrigger(true);
+                    break;
+                }
+            }
+            // Depending on the languaged selected, determines the languaged to be shown
+            for( i in self.selectedChannel() ) {
+                if( self.lang().lang == 'Spanish' ) {
+                    self.selectedChannel()[i].name( self.selectedChannel()[i].nameSpanish() );
+                }
+                if( self.lang().lang == 'English' ) {
+                    self.selectedChannel()[i].name( self.selectedChannel()[i].nameEnglish() );
+                }
+            }
+
+            // Creates a modal window, where the triggers are shown
+            $("#dialog-modal").dialog({
+                dialogClass: "no-close",
+                modal: true,
+                draggable: false,
+                resizable: false,
+                show: { effect: 'bounce', duration: 300 },
+                hide: { effect: 'slideUp', duration: 500 },
+                title: self.lang().t1,
+                buttons: {
+                    OK: function() {
+                        $(this).dialog('close');
+                    },
+                    Cancel: function() {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+
+        }
+
 
         /*
         *   Cambio la funcion doSearch por esta, mas adecuada para rule editor
@@ -1101,11 +1227,11 @@ $(document).ready(function () {
                     return;
                 }
                 */
-                self.getSearchJSON(0.49664612486958504);           
+                //self.getSearchJSON(0.49664612486958504);         
                 self.status(1);
                 self.page(1);
                 self.option(0); //pone los candidatos en forma de cubitos
-                self.currentEntity(/*this.params.entityId*/'0');
+                //self.currentEntity(/*this.params.entityId*/'0');
                 //self.doSearch(/*this.params.entityId*/'0');
                 self.getChannels();
                 numBoxes = (self.currentSearch.total() - 1);
