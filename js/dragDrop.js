@@ -128,8 +128,9 @@ function OnloadFunction() {
             self.containerRight.container()[dropIndex].containerName(channelName);
             self.containerRight.container()[dropIndex].containerLogo(channelLogo);
         }
-        OnloadFunction();
         self.showTriggers(channelName);
+        OnloadFunction();
+        
         //var dropIndex = /*$drop.attr('index')*/index;
         /*
         self.currentSearch.result()[dropIndex].entityName(compName);

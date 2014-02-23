@@ -296,7 +296,10 @@ $(document).ready(function () {
         self.selectedChannel = ko.observableArray(templateJson);
         self.selectedTrigger = ko.observable('');
         self.selectingTrigger = ko.observable(false);
-        self.language
+
+        // Used for saving editions of channels and triggers
+        self.ifthisConfig = ko.observable('');
+        self.thenthatConfig = ko.observable('');
         
         /* Añadido de travel */
         self.Travel = ko.observableArray(["true","false"]);
@@ -768,6 +771,8 @@ $(document).ready(function () {
                 title: self.lang().t1,
                 buttons: {
                     OK: function() {
+                        // Logic of saving
+                        self.ifthisConfig ( ko.mapping.fromJS(self.selectedTrigger()) );
                         $(this).dialog('close');
                     },
                     Cancel: function() {

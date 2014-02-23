@@ -37,25 +37,68 @@
 				"Ranking":["1"],
 				"Provenance":[""],
 				"Travel":[""],
+				"requirelogin": true,
 				"triggers": [
 					{
 						"uri": "channels/twitter/trigger/mention",
 						"nameSpanish": "Mención",
 						"nameEnglish": "Mention",
-						"name": ""
+						"name": "",
+						"configuration": {
+							"number": 0,
+							"configs": {
+								"type": "",
+								"spanish": {
+									"title": "",
+									"values": ""
+								},
+								"english": {
+									"title": "",
+									"values": ""
+								}
+							}
+						}
 					},
 					{
 						"uri": "channels/twitter/trigger/new-tweet",
 						"nameSpanish": "Nuevo tweet",
 						"nameEnglish": "New tweet",
-						"name": ""
+						"name": "",
+						"configuration": {
+							"number": 1,
+							"configs": {
+								"type": "checkbox",
+								"spanish": {
+									"title": "Incluir",
+									"values": ["retweets", "@menciones"]
+								},
+								"english": {
+									"title": "Include",
+									"values": ["retweets", "@mentions"]
+								}
+							}
+						}
 					}
 					,
 					{
 						"uri": "channels/twitter/trigger/new-follower",
 						"nameSpanish": "Nuevo seguidor",
 						"nameEnglish": "New follower",
-						"name": ""
+						"name": "",
+						"configuration": {
+							"number": 0,
+							"configs": {
+								"type": "",
+								"spanish": {
+									"title": "",
+									"values": ""
+								},
+								"english": {
+									"title": "",
+									"values": ""
+								}
+							}
+						}
 					}
 				]
 			},

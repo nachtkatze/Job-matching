@@ -1480,10 +1480,12 @@ height: 80px;
 }
 
 .triggerSelect select {
-  display: inline-block;
+  display: block;
   padding: 4px 3px 3px 5px;
   margin: 10px;
   font: inherit;
+  margin-left: auto;
+  margin-right: auto;
   background: transparent;
   line-height: 1.2;
   border:0;

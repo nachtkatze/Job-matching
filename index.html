@@ -121,7 +121,7 @@
     <div id="droppableElementsLeft" data-bind="visible: true" >
 
         <div data-bind="foreach: $root.containerLeft.container">
-	 <div class="droppable droppableCompany company droppableContainerLeft" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerLeft': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
+	 <div class="droppable droppableCompany company droppableContainerLeft" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerLeft': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
 
            
 	   <!-- ko if: $data.containerName() == '' -->
@@ -146,13 +146,29 @@
     <div class="lines" id="lines" data-bind="if: page() == 1">
 		  <img class="img" data-bind="attr: { 'src': lang().i1 }">
 	  </div>
+    <!-- ko if: containerLeft.container()[0].containerName() != '' -->
+      <div data-bind="visible: containerLeft.container()[0].containerName() != '' ">
+      <!-- ko if: ifthisConfig() != '' -->
+        <!-- ko if: lang().lang == 'Spanish' -->
+        <div data-bind="visible: ifthisConfig().uri() != '' ">
+          <p>Trigger:<h6><span data-bind="text: ifthisConfig().nameSpanish()"></span></h6></p>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: lang().lang == 'English' -->
+        <div data-bind="visible: ifthisConfig().uri() != '' ">
+          <p>Trigger:<h6><span data-bind="text: ifthisConfig().nameEnglish()"></span></h6></p>
+        </div>
+        <!-- /ko -->
+      <!-- /ko -->
+      </div>
+    <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: option() == 0 -->
     <div id="droppableElementsRight" data-bind="visible: true" >
 
         <div data-bind="foreach: $root.containerRight.container">
-   <div class="droppable droppableCompany company droppableContainerRight" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index+1}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index()), css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerRight': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
+   <div class="droppable droppableCompany company droppableContainerRight" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index+1}, css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerRight': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
 
            
      <!-- ko if: $data.containerName() == '' -->
@@ -741,10 +757,34 @@
 <!-- ko if: selectingTrigger() -->
 <div id="dialog-modal" data-bind="visible: false">
   <label class="triggerSelect">
-  <select class="triggerSelect-box" data-bind="options: $root.selectedChannel, value: $root.selectedTrigger, optionsText: function (trigger){return trigger.name()} "></select>
+  <select class="triggerSelect-box" data-bind="options: $root.selectedChannel, value: $root.selectedTrigger, optionsCaption: '...', 
+  optionsText: function (trigger){return trigger.name()} "></select>
   </label>
 
-  <p data-bind="text: 'You have selected '+ $root.selectedTrigger().name()"></p>
+  
+  <!-- ko if: selectedTrigger() != undefined -->
+  <div data-bind="visible: $root.selectedTrigger().uri() != '' ">
+    <!-- ko if: selectedTrigger().configuration.number() == 0 -->
+    <div>
+      <p><h3><span data-bind="text: lang().t3"></span></h3></p>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: selectedTrigger().configuration.configs.type() == 'checkbox' -->
+      <!-- ko if: lang().lang == 'Spanish' -->
+      <p><h5><span data-bind="text: selectedTrigger().configuration.configs.spanish.title()"></span></h5></p>
+      <div data-bind="foreach: $root.selectedTrigger().configuration.configs.spanish.values(), visible: $root.selectedTrigger().configuration.number() > 0">
+        <p><input type="checkbox"><span data-bind="text: $data"></span></input></p>
+      </div>
+      <!-- /ko -->
+      <!-- ko if: lang().lang == 'English' -->
+      <p><h5><span data-bind="text: selectedTrigger().configuration.configs.english.title()"></span></h5></p>
+      <div data-bind="foreach: $root.selectedTrigger().configuration.configs.english.values(), visible: $root.selectedTrigger().configuration.number() > 0">
+        <p><input type="checkbox"><span data-bind="text: $data"></span></input></p>
+      </div>
+      <!-- /ko -->
+    <!-- /ko -->
+  </div>
+  <!-- /ko -->
 
 </div>
 <!-- /ko -->
