@@ -31,7 +31,7 @@
 				"lmf.type":["http://xmlns.com/foaf/0.1/Person"],
 				"name":["Twitter"],
 				"Province":[""],
-				"logo":["http://localhost:7878/images/twitter"],
+				"logo":["http://homer.gsi.dit.upm.es:7878/images/twitter"],
 				"Type":["Channel"],
 				"Description":["This is the Twitter channel"],
 				"Ranking":["1"],
@@ -41,63 +41,87 @@
 				"triggers": [
 					{
 						"uri": "channels/twitter/trigger/mention",
-						"nameSpanish": "Mención",
-						"nameEnglish": "Mention",
-						"name": "",
+						"name": {
+							"Spanish": "Mención",
+							"English": "Mention"
+							},
 						"configuration": {
 							"number": 0,
-							"configs": {
+							"configs": [
+							{
 								"type": "",
-								"spanish": {
-									"title": "",
-									"values": ""
+								"title": {
+									"Spanish": "",
+									"English": ""
 								},
-								"english": {
-									"title": "",
-									"values": ""
+								"values": {
+									"general": "",
+									"Spanish": "",
+									"English": ""
 								}
 							}
+							]
 						}
 					},
 					{
 						"uri": "channels/twitter/trigger/new-tweet",
-						"nameSpanish": "Nuevo tweet",
-						"nameEnglish": "New tweet",
-						"name": "",
+						"name": {
+							"Spanish": "Nuevo tweet",
+							"English": "New tweet"
+						},
 						"configuration": {
-							"number": 1,
-							"configs": {
-								"type": "checkbox",
-								"spanish": {
-									"title": "Incluir",
-									"values": ["retweets", "@menciones"]
+							"number": 2,
+							"configs": [
+								{
+									"type": "checkbox",
+									"title": {
+										"Spanish": "Incluir",
+										"English": "Include"
+										},
+									"values": {
+										"general": ["retweet", "@mention"],
+										"Spanish": ["haces retweet", " haces una @mención"],
+										"English": ["you retweet", " you @mention"]
+									}									
 								},
-								"english": {
-									"title": "Include",
-									"values": ["retweets", "@mentions"]
-								}
-							}
+								{
+									"type": "radiobutton",
+									"title": {
+										"Spanish": "Más cosas",
+										"English": "More"
+										},
+									"values": {
+										"general": ["pretty", "ugly", "uglier"],
+										"Spanish": ["bonito", "feo", "más feo"],
+										"English": ["pretty", "ugly", "uglier"]
+									}	
+								}							
+							]
 						}
 					}
 					,
 					{
 						"uri": "channels/twitter/trigger/new-follower",
-						"nameSpanish": "Nuevo seguidor",
-						"nameEnglish": "New follower",
-						"name": "",
+						"name": {
+							"Spanish": "Nuevo seguidor",
+							"English": "New follower"
+							},
 						"configuration": {
 							"number": 0,
-							"configs": {
+							"configs": [
+							{
 								"type": "",
-								"spanish": {
-									"title": "",
-									"values": ""
+								"title": {
+									"Spanish": "",
+									"English": ""
 								},
-								"english": {
-									"title": "",
-									"values": ""
+								"values": {
+									"general": "",
+									"Spanish": "",
+									"English": ""
 								}
 							}
+							]
 						}
 					}
 				]
@@ -110,12 +134,62 @@
 				"lmf.type":["http://xmlns.com/foaf/0.1/Person"],
 				"name":["Gmail"],
 				"Province":[""],
-				"logo":["http://localhost:7878/images/gmail"],
+				"logo":["http://homer.gsi.dit.upm.es:7878/images/gmail"],
 				"Type":["Channel"],
 				"Description":["This is the GMail channel"],
 				"Ranking":["1"],
 				"Provenance":[""],
-				"Travel":[""]
+				"Travel":[""],
+				"triggers": [
+					{
+						"uri": "channels/gmail/trigger/new-mail",
+						"name": {
+							"Spanish": "Email nuevo",
+							"English": "New mail"
+							},
+						"configuration": {
+							"number": 0,
+							"configs": [
+							{
+								"type": "",
+								"title": {
+									"Spanish": "",
+									"English": ""
+								},
+								"values": {
+									"general": "sender",
+									"Spanish": "Remitente: ",
+									"English": "Sender: "
+								}
+							}
+							]
+						}
+					},
+					{
+						"uri": "channels/gmail/trigger/new-mail-from",
+						"name": {
+							"Spanish": "Email nuevo de",
+							"English": "New mail from"
+							},
+						"configuration": {
+							"number": 1,
+							"configs": [
+							{
+								"type": "inputform",
+								"title": {
+									"Spanish": "",
+									"English": ""
+								},
+								"values": {
+									"general": ["sender", "subject"],
+									"Spanish": ["Remitente: ", "Asunto: "],
+									"English": ["Sender: ", "Subject: "]
+								}
+							}
+							]
+						}
+					}
+				]
 			},
 			{
 				"id":"2",
@@ -125,7 +199,7 @@
 				"lmf.type":["http://xmlns.com/foaf/0.1/Person"],
 				"name":["Dropbox"],
 				"Province":[""],
-				"logo":["http://localhost:7878/images/dropbox"],
+				"logo":["http://homer.gsi.dit.upm.es:7878/images/dropbox"],
 				"Type":["Channel"],
 				"Description":["This is the Dropbox channel"],
 				"Ranking":["1"],
@@ -140,7 +214,7 @@
 				"lmf.type":["http://xmlns.com/foaf/0.1/Person"],
 				"name":["Google Drive"],
 				"Province":[""],
-				"logo":["http://localhost:7878/images/drive"],
+				"logo":["http://homer.gsi.dit.upm.es:7878/images/drive"],
 				"Type":["Channel"],
 				"Description":["This is the Google Drive channel"],
 				"Ranking":["1"],
@@ -155,7 +229,7 @@
 				"lmf.type":["http://xmlns.com/foaf/0.1/Person"],
 				"name":["Google Calendar"],
 				"Province":[""],
-				"logo":["http://localhost:7878/images/calendar"],
+				"logo":["http://homer.gsi.dit.upm.es:7878/images/calendar"],
 				"Type":["Channel"],
 				"Description":["This is the Google Calendar channel"],
 				"Ranking":["1"],

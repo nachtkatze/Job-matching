@@ -1,6 +1,6 @@
 {
   "note": "This is a sample config file. You should change the mockDirectory to a more reasonable path.",
-  "mockDirectory": "/home/oaraque/Job-matching/mock/",
+  "mockDirectory": "/home/oaraque/RuleEditor/mock/",
   "quiet": false,
   "port": "7878",
   "latency": 50,

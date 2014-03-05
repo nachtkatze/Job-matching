@@ -183,6 +183,42 @@ $(document).ready(function () {
         }]
     }
 
+    templateTriggerConfig = {
+        "uri": "",
+        "name": {
+            "Spanish": "",
+            "English": ""
+        },
+        "config": {
+            "checkbox": {
+                "general": [],
+                "Spanish": [],
+                "English": []
+            },
+            "radiobutton": {
+                "general": "",
+                "Spanish": "",
+                "English": ""
+            },
+            "inputform": {
+                "general": [],
+                "Spanish": [],
+                "English": [],
+                "data": []
+            }
+        }
+    }
+
+    templateInputForm = {
+        "config": {
+            "0": ko.observable(''),
+            "1": ko.observable(''),
+            "2": ko.observable(''),
+            "3": ko.observable(''),
+            "4": ko.observable('')
+        }
+    }
+
     templateEntity = {
         "id": 2,
         "entityName": "",
@@ -296,10 +332,15 @@ $(document).ready(function () {
         self.selectedChannel = ko.observableArray(templateJson);
         self.selectedTrigger = ko.observable('');
         self.selectingTrigger = ko.observable(false);
+        self.selectingLeftTrigger = ko.observable(false);
+        self.selectingRightTrigger = ko.observable(false);
 
         // Used for saving editions of channels and triggers
-        self.ifthisConfig = ko.observable('');
-        self.thenthatConfig = ko.observable('');
+        self.checkbox = ko.observableArray();
+        self.radiobutton = ko.observable('');
+        self.inputform = ko.mapping.fromJS(templateInputForm);
+        self.ifthisConfig = ko.mapping.fromJS(templateTriggerConfig);
+        self.thenthatConfig = ko.mapping.fromJS(templateTriggerConfig);
         
         /* Añadido de travel */
         self.Travel = ko.observableArray(["true","false"]);
@@ -610,136 +651,268 @@ $(document).ready(function () {
         $(document).ajaxStart(function () {});
         $(document).ajaxStart(function () {});
         
-        self.doSearch = function (entityIndex) {
-            self.loading('true');
-            $.blockUI();
-            var tempString = "";
-            var i = 0;
-            var entity_index = entityIndex;
-            var tempURL = "";
-            var query = "";
+        // self.doSearch = function (entityIndex) {
+        //     self.loading('true');
+        //     $.blockUI();
+        //     var tempString = "";
+        //     var i = 0;
+        //     var entity_index = entityIndex;
+        //     var tempURL = "";
+        //     var query = "";
            
-            ko.utils.arrayFilter(self.currentSearch.result()[entity_index].solr(), function (item) {
-                //console.log(item);
-                // Hacemos AND para diferentes propiedades y OR para los que estén activos dentro de una misma propiedad
-                // Por ejemplo: province:Madrid OR province:Barcelona AND type:Universidad
-                i = 0;
-                tempString = "";
-                if (item.field != undefined && item.type() != "inputText") {
-                    var catParent = item.field();
-                    $.each(item.values(), function (index2, item2) {
-                        if (i == 0) {
-                            tempString += catParent + ':"' + item2 + '"';
-                            i++;
-                        } else {
-                            tempString += ' OR ' + catParent + ':"' + item2 + '"';
-                        }
-                    });
-                    //////console.log(tempString);
-                    tempURL += '&fq=' + tempString;
-                }
-                if (item.field != undefined && item.type() == "inputText") {
-                    $.each(item.values(), function (index2, item2) {
-                        query += item2 + " ";
-                    });
-                    if (query != "") {
-                        query = '&q=' + query
-                    } else {
-                        query = '&q=*:*'
-                    }
-                }
-            });
-            // console.log(query);
-            //console.log(tempURL);
+        //     ko.utils.arrayFilter(self.currentSearch.result()[entity_index].solr(), function (item) {
+        //         //console.log(item);
+        //         // Hacemos AND para diferentes propiedades y OR para los que estén activos dentro de una misma propiedad
+        //         // Por ejemplo: province:Madrid OR province:Barcelona AND type:Universidad
+        //         i = 0;
+        //         tempString = "";
+        //         if (item.field != undefined && item.type() != "inputText") {
+        //             var catParent = item.field();
+        //             $.each(item.values(), function (index2, item2) {
+        //                 if (i == 0) {
+        //                     tempString += catParent + ':"' + item2 + '"';
+        //                     i++;
+        //                 } else {
+        //                     tempString += ' OR ' + catParent + ':"' + item2 + '"';
+        //                 }
+        //             });
+        //             //////console.log(tempString);
+        //             tempURL += '&fq=' + tempString;
+        //         }
+        //         if (item.field != undefined && item.type() == "inputText") {
+        //             $.each(item.values(), function (index2, item2) {
+        //                 query += item2 + " ";
+        //             });
+        //             if (query != "") {
+        //                 query = '&q=' + query
+        //             } else {
+        //                 query = '&q=*:*'
+        //             }
+        //         }
+        //     });
+        //     // console.log(query);
+        //     //console.log(tempURL);
             
-            var finalQuery = endPointSOLR + query + tempURL;
-            self.viewData.removeAll();
-            self.companiesData.removeAll();
-            self.recommendedData.removeAll();
-            $.ajax({
-                type: 'post',
-                url: /*finalQuery*/mockCandidates,
-                data: {},
-                dataType: 'json',
-                ContentType: 'text/html; charset=UTF-8',
-                success: (function (allData) {
-                    data = JSON.stringify(allData.response.docs);
-                    //console.log(allData);
-                    //console.log("Alldata es: " + data); 
-                    var parsedJSON = JSON.parse(data);
-                    if (self.currentSearch.result()[entity_index].semantic() != '' && self.currentSearch.result()[entity_index].isSemantic() == 'true') {
+        //     var finalQuery = endPointSOLR + query + tempURL;
+        //     self.viewData.removeAll();
+        //     self.companiesData.removeAll();
+        //     self.recommendedData.removeAll();
+        //     $.ajax({
+        //         type: 'post',
+        //         url: /*finalQuery*/mockCandidates,
+        //         data: {},
+        //         dataType: 'json',
+        //         ContentType: 'text/html; charset=UTF-8',
+        //         success: (function (allData) {
+        //             data = JSON.stringify(allData.response.docs);
+        //             //console.log(allData);
+        //             //console.log("Alldata es: " + data); 
+        //             var parsedJSON = JSON.parse(data);
+        //             if (self.currentSearch.result()[entity_index].semantic() != '' && self.currentSearch.result()[entity_index].isSemantic() == 'true') {
                         
-                        $.growlUI(self.lang().m8 + ':', self.lang().m9);
-                        var jsonEmpresas = JSON.stringify(parsedJSON);
+        //                 $.growlUI(self.lang().m8 + ':', self.lang().m9);
+        //                 var jsonEmpresas = JSON.stringify(parsedJSON);
                 
-                        var unmapped = ko.mapping.toJS(self.currentSearch);
-                        var SearchJson = unmapped;
-                        var searchName = self.currentSearch.name();
-                        $.ajax({
-                            type: 'get',
-                            //url: 'http://lab.gsi.dit.upm.es/episteme/tomcat/Episteme/CompanyMatcher?offer='+JSON.stringify([SearchJson])+'&entity='+entity_index,
-                          //  url: endPointSemanticMatcher+'?offer={"episteme.search.' + searchName + '":' + JSON.stringify([SearchJson]) + '}&entity=' + entity_index,
-							  url: /*endPointSemanticMatcher+'{"episteme.search.new_search":' + JSON.stringify([SearchJson]) + '}'*/mockSemantic,
-                           // data: {
-                           //    'json': jsonEmpresas
-                           // },
+        //                 var unmapped = ko.mapping.toJS(self.currentSearch);
+        //                 var SearchJson = unmapped;
+        //                 var searchName = self.currentSearch.name();
+        //                 $.ajax({
+        //                     type: 'get',
+        //                     //url: 'http://lab.gsi.dit.upm.es/episteme/tomcat/Episteme/CompanyMatcher?offer='+JSON.stringify([SearchJson])+'&entity='+entity_index,
+        //                   //  url: endPointSemanticMatcher+'?offer={"episteme.search.' + searchName + '":' + JSON.stringify([SearchJson]) + '}&entity=' + entity_index,
+							 //  url: /*endPointSemanticMatcher+'{"episteme.search.new_search":' + JSON.stringify([SearchJson]) + '}'*/mockSemantic,
+        //                    // data: {
+        //                    //    'json': jsonEmpresas
+        //                    // },
                            
-                            dataType: 'json',
-                            ContentType: 'text/html; charset=UTF-8',
-                            success: (function (allData) {
-                                data = JSON.stringify(allData);
+        //                     dataType: 'json',
+        //                     ContentType: 'text/html; charset=UTF-8',
+        //                     success: (function (allData) {
+        //                         data = JSON.stringify(allData);
 
-                                var semanticJson = JSON.parse(data);
-                                var parsedJSON = JSON.parse(jsonEmpresas);
-                                dataParsed = parsedJSON;
+        //                         var semanticJson = JSON.parse(data);
+        //                         var parsedJSON = JSON.parse(jsonEmpresas);
+        //                         dataParsed = parsedJSON;
 
-                                for(var i=0; i < parsedJSON.length; i++){
-                                	var uri = parsedJSON[i]["lmf.uri"];
-                                	for(var j = 0; j < semanticJson.length; j++){
-                                		if(semanticJson[j]["url"] == uri){
-                                			parsedJSON[i]["weight"] = semanticJson[j]["sim"];
-                                			break;
-                                		}
-                                	}
-                                }
+        //                         for(var i=0; i < parsedJSON.length; i++){
+        //                         	var uri = parsedJSON[i]["lmf.uri"];
+        //                         	for(var j = 0; j < semanticJson.length; j++){
+        //                         		if(semanticJson[j]["url"] == uri){
+        //                         			parsedJSON[i]["weight"] = semanticJson[j]["sim"];
+        //                         			break;
+        //                         		}
+        //                         	}
+        //                         }
                                                               
                                 
                                 
-                                //console.log(JSON.stringify(parsedJSON));
-                                self.semanticOrder(true);
-                                ko.mapping.fromJS(parsedJSON, self.companiesData);
-                                ko.mapping.fromJS(parsedJSON, self.viewData);
-                                ko.mapping.fromJS(parsedJSON, self.recommendedData);
-                                self.recommendedData.sortByNumberAsc('Ranking');
-                                self.viewData.sortByNumberAsc('weight');
+        //                         //console.log(JSON.stringify(parsedJSON));
+        //                         self.semanticOrder(true);
+        //                         ko.mapping.fromJS(parsedJSON, self.companiesData);
+        //                         ko.mapping.fromJS(parsedJSON, self.viewData);
+        //                         ko.mapping.fromJS(parsedJSON, self.recommendedData);
+        //                         self.recommendedData.sortByNumberAsc('Ranking');
+        //                         self.viewData.sortByNumberAsc('weight');
 
-                                $(".dragContainer").hide().fadeIn();
-                                self.reload();
-                            })
-                        });
-                    } 
-                    else {
-                        for(var i=0; i < parsedJSON.length; i++){
-                            parsedJSON[i]["weight"] = "Off";
-                        }
+        //                         $(".dragContainer").hide().fadeIn();
+        //                         self.reload();
+        //                     })
+        //                 });
+        //             } 
+        //             else {
+        //                 for(var i=0; i < parsedJSON.length; i++){
+        //                     parsedJSON[i]["weight"] = "Off";
+        //                 }
 
-                        self.semanticOrder(false);
-                        ko.mapping.fromJS(parsedJSON, self.companiesData);
-                        ko.mapping.fromJS(parsedJSON, self.viewData);
-                        ko.mapping.fromJS(parsedJSON, self.recommendedData);
-                        self.recommendedData.sortByNumberAsc('Ranking');
-                        self.viewData.sortByPropertyAsc('name');                        
-                        $(".dragContainer").hide().fadeIn();
-                        self.reload();
+        //                 self.semanticOrder(false);
+        //                 ko.mapping.fromJS(parsedJSON, self.companiesData);
+        //                 ko.mapping.fromJS(parsedJSON, self.viewData);
+        //                 ko.mapping.fromJS(parsedJSON, self.recommendedData);
+        //                 self.recommendedData.sortByNumberAsc('Ranking');
+        //                 self.viewData.sortByPropertyAsc('name');                        
+        //                 $(".dragContainer").hide().fadeIn();
+        //                 self.reload();
+        //             }
+        //         })
+        //     });
+        // };
+        
+        self.saveInputForm = function(container) {
+            console.log("entra")
+            for(property in self.inputform.config) {              
+                if(self.inputform.config[property]() != '') {
+                    console.log(self.inputform.config[property]());
+                    container.config.inputform.data.push(self.inputform.config[property]());
+                }
+            }
+        }
+
+        self.containerSelected = function(option) {
+
+            if(self.selectingLeftTrigger()) {
+                if(option == 'OK'){ self.saveConfig(self.ifthisConfig); }
+                if(option == 'Cancel'){ self.cleanConfiguration(self.ifthisConfig); console.log("entra a limpiar")}    
+            }
+            if(self.selectingRightTrigger()) {
+                if(option == 'OK'){ self.saveConfig(self.thenthatConfig); }
+                if(option == 'Cancel'){ self.cleanConfiguration(self.thenthatConfig); }
+            }
+            
+        }
+
+        self.selectingTriggerEnded = function() {
+            self.selectingLeftTrigger(false);
+            self.selectingRightTrigger(false);
+            self.selectingTrigger(false);
+        }
+
+        /*
+            Cleans the data as a parameter, sweeping all the languages
+        */
+        
+        self.cleanWithLanguages = function(property) {
+
+            for(language in property) {
+                property[language]([]);
+            }
+        }
+
+        /*
+            Cleans the configuration data of the parameter, including all languages
+        */
+
+        self.cleanConfiguration = function(container) {
+
+            for(edited in container.config) {
+                self.cleanWithLanguages(container.config[edited]);
+            }
+            container.uri('');
+            self.cleanWithLanguages(container.name);
+        }
+        
+        /*
+            Moves data from one property to one destination objects,
+            including all the languages available in the system.
+            It includes the use of a index, in case of arrays are involved.
+        */
+        self.saveWithLanguages = function(destination, property, index, option) {
+
+            // If push with index is needes, uses this
+            if(option && index >= 0) {
+                for(language in property) {
+                    if(language == 'general') { continue; }
+                    destination[language].push(property[language]()[index]);    
+                }
+                return;
+            }
+
+            // If index needed, uses this
+            if(index >= 0) {    
+                for(language in property) {
+                    if(language == 'general') { continue; }
+                    destination[language]( property[language]()[index] );          
+                }
+                return;    
+            }
+
+            // If no index needed, uses this
+            for(language in property) {
+                if(language == 'general') { continue; }
+                destination[language]( property[language]() );
+            }
+            
+        }
+
+
+        /*
+            Is called when a trigger is selected, and the confirmation Button is pressed.
+            It saves the configuration edited.
+        */
+        self.saveConfig = function(container) {
+
+            // Cleans all the previous configuration saved, in all the languages available 
+            
+            self.cleanConfiguration(container);
+
+
+            // Saves to ifthisConfig the name of the selected trigger in all the available languages
+            self.saveWithLanguages(container.name, self.selectedTrigger().name);
+
+            // Saves the trigger uri
+            container.uri( self.selectedTrigger().uri() );
+
+            // Saves the configuration edited, and copies to ifthisConfig in all the available languages
+            var configs = self.selectedTrigger().configuration.configs();
+            for(var index = 0; index < configs.length; index++) {
+                var configs_values = self.selectedTrigger().configuration.configs()[index].values.general();
+                for(item in configs_values) {
+                    if(configs_values[item] == self.radiobutton()) {
+                        container.config.radiobutton.general( configs_values[item] );
+                        self.saveWithLanguages(container.config.radiobutton, self.selectedTrigger().configuration.configs()[index].values, item);
                     }
-                })
-            });
-        };
+                    for(checked in self.checkbox()) {
+                       if(configs_values[item] == self.checkbox()[checked]) {
+                        // Saves the configuration in general (independent of the language)
+                        container.config.checkbox.general( self.checkbox() );
+                        // Saves the configuration in every language
+                        self.saveWithLanguages(container.config.checkbox, self.selectedTrigger().configuration.configs()[index].values, item, 'push');
+                        }
+                    }
+                    if(self.selectedTrigger().configuration.configs()[index].type() == 'inputform') {
+                        container.config.inputform.general.push(configs_values[item]);
+                        self.saveWithLanguages(container.config.inputform, self.selectedTrigger().configuration.configs()[index].values, item, 'push');
+                        if(item == configs_values.length - 1) {
+                           self.saveInputForm(container); 
+                        }      
+                    }
+                }
+            }
+        }
 
         /*
             Function called when a channel is dropped into a container
         */
-        self.showTriggers = function(channel) {
+        self.showTriggers = function(channel, objChannel) {
 
             // Searches the uri of the dragged channel, and saves it into selectedChannel
             var nameIndex = 0;
@@ -750,6 +923,7 @@ $(document).ready(function () {
                     break;
                 }
             }
+            /*
             // Depending on the languaged selected, determines the languaged to be shown
             for( i in self.selectedChannel() ) {
                 if( self.lang().lang == 'Spanish' ) {
@@ -758,7 +932,7 @@ $(document).ready(function () {
                 if( self.lang().lang == 'English' ) {
                     self.selectedChannel()[i].name( self.selectedChannel()[i].nameEnglish() );
                 }
-            }
+            }*/
 
             // Creates a modal window, where the triggers are shown
             $("#dialog-modal").dialog({
@@ -772,10 +946,16 @@ $(document).ready(function () {
                 buttons: {
                     OK: function() {
                         // Logic of saving
-                        self.ifthisConfig ( ko.mapping.fromJS(self.selectedTrigger()) );
+                        self.containerSelected('OK');
+                        self.selectingTriggerEnded();
                         $(this).dialog('close');
                     },
                     Cancel: function() {
+                        // Logic of cancelling
+                        self.containerSelected('Cancel');
+                        self.selectingTriggerEnded();
+                        objChannel.containerName('');
+                        objChannel.containerLogo('');
                         $(this).dialog('close');
                     }
                 }

@@ -121,7 +121,7 @@
     <div id="droppableElementsLeft" data-bind="visible: true" >
 
         <div data-bind="foreach: $root.containerLeft.container">
-	 <div class="droppable droppableCompany company droppableContainerLeft" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerLeft': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
+	 <div class="droppable droppableCompany company droppableContainerLeft" class="class2" id="droppable1" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index},  css: { 'stateDisabled': $root.currentEntity() != $index(), 'selected': $root.currentEntity() == $index(), 'draggableContainerLeft': $data.containerName() != '', 'draggableEmpty': $data.containerName() == ''}">
 
            
 	   <!-- ko if: $data.containerName() == '' -->
@@ -146,22 +146,33 @@
     <div class="lines" id="lines" data-bind="if: page() == 1">
 		  <img class="img" data-bind="attr: { 'src': lang().i1 }">
 	  </div>
+
     <!-- ko if: containerLeft.container()[0].containerName() != '' -->
-      <div data-bind="visible: containerLeft.container()[0].containerName() != '' ">
-      <!-- ko if: ifthisConfig() != '' -->
-        <!-- ko if: lang().lang == 'Spanish' -->
-        <div data-bind="visible: ifthisConfig().uri() != '' ">
-          <p>Trigger:<h6><span data-bind="text: ifthisConfig().nameSpanish()"></span></h6></p>
+      <div class="containerDescription" data-bind="visible: containerLeft.container()[0].containerName() != '' ">
+      <!-- ko if: ifthisConfig != '' -->
+      <div data-bind="visible: !selectingTrigger() || ifthisConfig.uri() != '' ">
+        <p><span data-bind="text: lang().t4"></span><h6><span data-bind="text: ifthisConfig.name[$root.lang().lang]() + ''"></span></h6></p>
+
+        <p data-bind="visible: $root.ifthisConfig.config.checkbox.general().length > 0">
+          <span data-bind="text: lang().t5"></span><h6><span data-bind="text: ifthisConfig.config.checkbox[$root.lang().lang]()"></span></h6>
+        </p>
+
+        <p data-bind="visible: $root.ifthisConfig.config.radiobutton.general() != '' ">
+          <span data-bind="text: lang().t6"></span><h6><span data-bind="text: ifthisConfig.config.radiobutton[$root.lang().lang]"></span></h6>
+        </p>
+
+        <p data-bind="visible: $root.ifthisConfig.config.inputform.data().length > 0">
+        <div data-bind="foreach: $root.ifthisConfig.config.inputform[$root.lang().lang]()">
+          <span data-bind="text: $root.ifthisConfig.config.inputform[$root.lang().lang]()[$index()]"></span>
+          <h6><span data-bind="text: $root.ifthisConfig.config.inputform.data()[$index()]"></span></h6>
         </div>
-        <!-- /ko -->
-        <!-- ko if: lang().lang == 'English' -->
-        <div data-bind="visible: ifthisConfig().uri() != '' ">
-          <p>Trigger:<h6><span data-bind="text: ifthisConfig().nameEnglish()"></span></h6></p>
-        </div>
-        <!-- /ko -->
+        </p>
+
+      </div>
       <!-- /ko -->
       </div>
     <!-- /ko -->
+
     </div>
     <!-- /ko -->
     <!-- ko if: option() == 0 -->
@@ -193,6 +204,33 @@
     <div class="lines" id="lines" data-bind="if: page() == 1">
       <img class="img" data-bind="attr: { 'src': lang().i1 }">
     </div>
+
+    <!-- ko if: containerRight.container()[0].containerName() != '' -->
+      <div class="containerDescription" data-bind="visible: containerRight.container()[0].containerName() != '' ">
+      <!-- ko if: thenthatConfig != '' -->
+      <div data-bind="visible: !selectingTrigger() || thenthatConfig.uri() != '' ">
+        <p><span data-bind="text: lang().t4"></span><h6><span data-bind="text: thenthatConfig.name[$root.lang().lang]() + ''"></span></h6></p>
+
+        <p data-bind="visible: $root.thenthatConfig.config.checkbox.general().length > 0">
+          <span data-bind="text: lang().t5"></span><h6><span data-bind="text: thenthatConfig.config.checkbox[$root.lang().lang]()"></span></h6>
+        </p>
+
+        <p data-bind="visible: $root.thenthatConfig.config.radiobutton.general() != '' ">
+          <span data-bind="text: lang().t6"></span><h6><span data-bind="text: thenthatConfig.config.radiobutton[$root.lang().lang]"></span></h6>
+        </p>
+
+        <p data-bind="visible: $root.thenthatConfig.config.inputform.data().length > 0">
+        <div data-bind="foreach: $root.thenthatConfig.config.inputform[$root.lang().lang]()">
+          <span data-bind="text: $root.thenthatConfig.config.inputform[$root.lang().lang]()[$index()]"></span>
+          <h6><span data-bind="text: $root.thenthatConfig.config.inputform.data()[$index()]"></span></h6>
+        </div>
+        </p>
+
+      </div>
+      <!-- /ko -->
+      </div>
+    <!-- /ko -->
+
     </div>
     <!-- /ko -->
     <div id="finalizeElements" data-bind="visible: page() == 2" >
@@ -758,7 +796,7 @@
 <div id="dialog-modal" data-bind="visible: false">
   <label class="triggerSelect">
   <select class="triggerSelect-box" data-bind="options: $root.selectedChannel, value: $root.selectedTrigger, optionsCaption: '...', 
-  optionsText: function (trigger){return trigger.name()} "></select>
+  optionsText: function (trigger){return trigger.name[$root.lang().lang] } "></select>
   </label>
 
   
@@ -769,20 +807,37 @@
       <p><h3><span data-bind="text: lang().t3"></span></h3></p>
     </div>
     <!-- /ko -->
-    <!-- ko if: selectedTrigger().configuration.configs.type() == 'checkbox' -->
-      <!-- ko if: lang().lang == 'Spanish' -->
-      <p><h5><span data-bind="text: selectedTrigger().configuration.configs.spanish.title()"></span></h5></p>
-      <div data-bind="foreach: $root.selectedTrigger().configuration.configs.spanish.values(), visible: $root.selectedTrigger().configuration.number() > 0">
-        <p><input type="checkbox"><span data-bind="text: $data"></span></input></p>
+    <!-- ko foreach: selectedTrigger().configuration.configs() -->
+
+      <!-- ko if: type() == 'checkbox' -->
+      <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
+      <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
+        <p><input type="checkbox" data-bind="attr: { value: $data }, checked: $root.checkbox">
+          <span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span>
+        </input></p>
       </div>
       <!-- /ko -->
-      <!-- ko if: lang().lang == 'English' -->
-      <p><h5><span data-bind="text: selectedTrigger().configuration.configs.english.title()"></span></h5></p>
-      <div data-bind="foreach: $root.selectedTrigger().configuration.configs.english.values(), visible: $root.selectedTrigger().configuration.number() > 0">
-        <p><input type="checkbox"><span data-bind="text: $data"></span></input></p>
+      
+      <!-- ko if: type() == 'radiobutton' -->
+      <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
+      <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
+        <p><input type="radio" data-bind="attr: { value: $data }, checked: $root.radiobutton">
+          <span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span>
+        </input></p>
       </div>
       <!-- /ko -->
-    <!-- /ko -->
+
+      <!-- ko if: type() == 'inputform' -->
+      <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
+        <p>
+          <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
+          <h6><span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span></h6>
+          <input type="text" data-bind="value: $root.inputform.config[$index()]">
+          </div>
+        </p>
+      <!-- /ko -->
+
+    <!-- /ko --> 
   </div>
   <!-- /ko -->
 

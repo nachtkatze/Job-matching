@@ -124,11 +124,15 @@ function OnloadFunction() {
         if(side == 'left'){
             self.containerLeft.container()[dropIndex].containerName(channelName);
             self.containerLeft.container()[dropIndex].containerLogo(channelLogo);
+            self.selectingLeftTrigger(true);
+            self.showTriggers(channelName, self.containerLeft.container()[dropIndex]);
         }if(side == 'right'){
             self.containerRight.container()[dropIndex].containerName(channelName);
             self.containerRight.container()[dropIndex].containerLogo(channelLogo);
+            self.selectingRightTrigger(true);
+            self.showTriggers(channelName, self.containerRight.container()[dropIndex]);
         }
-        self.showTriggers(channelName);
+        
         OnloadFunction();
         
         //var dropIndex = /*$drop.attr('index')*/index;
