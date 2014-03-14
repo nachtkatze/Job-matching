@@ -51,6 +51,19 @@ $(document).ready(function () {
         //console.log(ko.utils.arrayGetDistinctValues(results).sort());
         return ko.utils.arrayGetDistinctValues(results).sort();
     };
+    // Handler that allows to fade in/out
+    ko.bindingHandlers.fadeVisible = {
+        init: function(element, valueAccessor) {
+            // Start visible/invisible according to initial value
+            var shouldDisplay = valueAccessor();
+            $(element).toggle(shouldDisplay);
+        },
+        update: function(element, valueAccessor) {
+            // On update, fade in/out
+            var shouldDisplay = valueAccessor();
+            shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
+        } 
+    };
     
     templateJson = []
     templateSkills = []
@@ -940,7 +953,8 @@ $(document).ready(function () {
                 modal: true,
                 draggable: false,
                 resizable: false,
-                show: { effect: 'bounce', duration: 300 },
+                autoResize: true,
+                show: { effect: 'drop', duration: 300 },
                 hide: { effect: 'slideUp', duration: 500 },
                 title: self.lang().t1,
                 buttons: {
@@ -958,9 +972,12 @@ $(document).ready(function () {
                         objChannel.containerLogo('');
                         $(this).dialog('close');
                     }
+                },
+                resize: function(envent, ui){
+                    console.log("resize event")
+                    $("#dialog-modal").dialog("widget").animate(ui.size);
                 }
             });
-
         }
 
 

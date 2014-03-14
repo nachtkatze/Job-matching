@@ -1461,6 +1461,9 @@ height: 80px;
 .ui-dialog-titlebar {
   background: #00B800;
   border: #00B800;
+  font-size: 1.3em;
+  font-family: "helvetica-neue-lt-std-35-thin";
+  font-weight: bold;
 }
 
 .triggerSelect {
@@ -1478,12 +1481,20 @@ height: 80px;
   display: block;
   padding: 4px 3px 3px 5px;
   margin: 10px;
+  margin-bottom: 40px;
   font: inherit;
   margin-left: auto;
   margin-right: auto;
   background: transparent;
   line-height: 1.2;
   border:0;
+  outline: none;
+    color: #74646e;
+    border: 1px solid #C8BFC4;
+    border-radius: 4px;
+    box-shadow: inset 1px 1px 2px #ddd8dc;
+    background-color: #fff; 
+    background: url(../images/gsi_logo.png) no-repeat right center white;
 }
 
 .containerDescription {
@@ -1492,4 +1503,5 @@ height: 80px;
 
 .triggerEditor {
   margin: 5px;
+  font-size: 1.2em;
 }

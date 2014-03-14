@@ -804,7 +804,7 @@
   <div data-bind="visible: $root.selectedTrigger().uri() != '' ">
     <!-- ko if: selectedTrigger().configuration.number() == 0 -->
     <div>
-      <p><h3><span data-bind="text: lang().t3"></span></h3></p>
+      <p class="triggerEditor"><h3><span data-bind="text: lang().t3"></span></h3></p>
     </div>
     <!-- /ko -->
     <!-- ko foreach: selectedTrigger().configuration.configs() -->
@@ -812,7 +812,7 @@
       <!-- ko if: type() == 'checkbox' -->
       <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
       <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
-        <p><input type="checkbox" data-bind="attr: { value: $data }, checked: $root.checkbox">
+        <p class="triggerEditor"><input type="checkbox" data-bind="attr: { value: $data }, checked: $root.checkbox">
           <span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span>
         </input></p>
       </div>
@@ -821,7 +821,7 @@
       <!-- ko if: type() == 'radiobutton' -->
       <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
       <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
-        <p><input type="radio" data-bind="attr: { value: $data }, checked: $root.radiobutton">
+        <p class="triggerEditor"><input type="radio" data-bind="attr: { value: $data }, checked: $root.radiobutton">
           <span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span>
         </input></p>
       </div>
@@ -829,7 +829,7 @@
 
       <!-- ko if: type() == 'inputform' -->
       <p class="triggerEditor"><h5><span data-bind="text: title[$root.lang().lang]()"></span></h5></p>
-        <p>
+        <p class="triggerEditor">
           <div data-bind="foreach: values['general'](), visible: $root.selectedTrigger().configuration.number() > 0">
           <h6><span data-bind="text: $parent.values[$root.lang().lang]()[$index()]"></span></h6>
           <input type="text" data-bind="value: $root.inputform.config[$index()]">

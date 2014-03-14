@@ -7,8 +7,8 @@ endPointJSON = "http://demos.gsi.dit.upm.es/lmf/config/data/";
 endPointSemanticMatcher = "http://demos.gsi.dit.upm.es/gsimatch/rest/job/search?q=";
 
 // URLs belonging to rule editor
-mockCandidates = "http://homer.gsi.dit.upm.es:7878/channels";
+mockCandidates = "http://homer.gsi.dit.upm.es/RuleEditor/channels/channels";
 
-mockSemantic = "http://homer.gsi.dit.upm.es:7878/semantic";
+mockSemantic = "http://homer.gsi.dit.upm.es/RuleEditor/channels/semantic";
 
-mockSearchData = "http://homer.gsi.dit.upm.es:7878/searchData";
+mockSearchData = "http://homer.gsi.dit.upm.es/RuleEditor/channels/searchdata";
