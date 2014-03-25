@@ -354,6 +354,12 @@ $(document).ready(function () {
         self.inputform = ko.mapping.fromJS(templateInputForm);
         self.ifthisConfig = ko.mapping.fromJS(templateTriggerConfig);
         self.thenthatConfig = ko.mapping.fromJS(templateTriggerConfig);
+        self.editionFinished = ko.computed(function(){
+            return ((self.ifthisConfig.uri() != '') && (self.thenthatConfig.uri() != ''));
+        });
+
+        // Used for help textbox
+        self.channelDetail
         
         /* Añadido de travel */
         self.Travel = ko.observableArray(["true","false"]);
@@ -789,9 +795,20 @@ $(document).ready(function () {
         //         })
         //     });
         // };
+
+        
+
+        self.cancelEdition = function(){
+            var dropIndex = 0;
+            self.containerLeft.container()[dropIndex].containerName('');
+            self.containerLeft.container()[dropIndex].containerLogo('');
+            self.cleanConfiguration(self.ifthisConfig);
+            self.containerRight.container()[dropIndex].containerName('');
+            self.containerRight.container()[dropIndex].containerLogo('');
+            self.cleanConfiguration(self.thenthatConfig);
+        }
         
         self.saveInputForm = function(container) {
-            console.log("entra")
             for(property in self.inputform.config) {              
                 if(self.inputform.config[property]() != '') {
                     console.log(self.inputform.config[property]());
@@ -804,7 +821,7 @@ $(document).ready(function () {
 
             if(self.selectingLeftTrigger()) {
                 if(option == 'OK'){ self.saveConfig(self.ifthisConfig); }
-                if(option == 'Cancel'){ self.cleanConfiguration(self.ifthisConfig); console.log("entra a limpiar")}    
+                if(option == 'Cancel'){ self.cleanConfiguration(self.ifthisConfig); }    
             }
             if(self.selectingRightTrigger()) {
                 if(option == 'OK'){ self.saveConfig(self.thenthatConfig); }

@@ -102,10 +102,12 @@ function OnloadFunction() {
         if(side == 'left'){
             self.containerLeft.container()[dropIndex].containerName('');
             self.containerLeft.container()[dropIndex].containerLogo('');
+            self.cleanConfiguration(self.ifthisConfig);
         }
         if(side == 'right'){
             self.containerRight.container()[dropIndex].containerName('');
             self.containerRight.container()[dropIndex].containerLogo('');
+            self.cleanConfiguration(self.thenthatConfig);
         }
         /*
         self.currentSearch.result()[dropIndex].entityLogo('');

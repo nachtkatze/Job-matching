@@ -38,7 +38,7 @@
     
     <link rel="icon" href="images/favicon.ico" type="image/x-icon"> 
     
-	<title>GSI Semantic Searcher</title>
+	<title>GSI Rule Editor</title>
 
 </head>
 
@@ -233,83 +233,11 @@
 
     </div>
     <!-- /ko -->
-    <div id="finalizeElements" data-bind="visible: page() == 2" >
-       <div id="finalizeContainer" class="finalizeContainer" data-bind="visible: page() == 2">
-
-          <h2> <span data-bind="text: lang().f1"></span> </h2>
-          <p><span data-bind="text: lang().f6"></span></p>
-<!-- ko foreach: $root.currentSearch.result -->
-  <div>
-    <div class="finalize filter">
-      <!-- COMPANY ICON -->
-    <div class="finalizeCompany" class="class2" data-bind="visible: $root.page() > 0, attr: {'name': $data, 'index': $index}, click: $root.changeURL.bind($data,'#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $index())">
-
-           <div class="draggableInfo droppableInfo" data-bind="attr: {'title': 'title'}">?</div>
-           <div class="droppedLogoContainer">
-               <!-- ko if: $data.entityLogo() != '' -->
-               <img class="defaultLogo" src="images/default.png" data-bind="attr: { 'src': $data.entityLogo() }"/>
-               <!-- /ko -->
-               <!-- ko if: $data.entityLogo() == '' -->
-               <img class="defaultLogo" src="images/default.png"/>
-               <!-- /ko -->
-           </div>
-           <div class="textContainer">
-               <p class="draggableText" data-bind="text: $data.entityName()"></p>
-           </div>
-
-    </div>
-    <!-- /COMPANY ICON -->
-      <div class="filterName" ><span data-bind="text: $root.lang().filters"></span></div>
-      <ul id="breadcrumbs-four">
-        <!-- ko foreach: $data.semantic -->
-        <li class="current"><a data-bind="text: $data.skill()+' ['+$root.lang()[$data.level()]+']', attr: {'title': $root.lang().semanticFilters}"></a></li>
-        <!-- /ko -->
-	<!-- ko foreach: $data.solr -->
-	    <!-- ko foreach: $data.values -->
-            <li class="current"><a data-bind="text: $data, attr: {'title': $root.lang()[$parentContext.$data.name()]}"></a></li>
-	    <!-- /ko -->
-        <!-- /ko -->
-      </ul>
-    </div>
-  </div>
-<!-- /ko -->
-
-	  <div class = "finalizeButtons">
-	    <div class = "finalizeBtn">
-		<a href="#" onclick="futureModal()">
-		  <div class = "finalizeIcon ">
-                    <img src="images/mail.png" />
-		  </div>
-		  <div class = "finalizeText"><span data-bind="text: lang().f2"></span></div>
-		</a>
-	    </div>
-	    <div class = "finalizeBtn">
-		<a href="#" onclick="futureModal()">
-		  <div class = "finalizeIcon ">
-                    <img src="images/phone.png" />
-		  </div>
-		  <div class = "finalizeText"><span data-bind="text: lang().f3"></span></div>
-		</a>
-	    </div>
-            <div class = "finalizeBtn" data-bind="visible: option() != 1">
-		<a href="#" data-bind="click: $root.doSaveJSON">
-		  <div class = "finalizeIcon ">
-                    <img src="images/save.png" />
-		  </div>
-		  <div class = "finalizeText"><span data-bind="text: lang().f7"></span></div>
-		</a>
-	    </div>
-	    <div class = "finalizeBtn">
-		<a href="#" data-bind="attr: {'href': '#/composer' + '/' + $root.currentSearch.id() + '/entity/' + $root.currentEntity()}">
-		  <div class = "finalizeIcon ">
-                    <img src="images/reload.png" />
-		  </div>
-		  <div class = "finalizeText"><span data-bind="text: lang().f5"></span></div>
-		</a>
-	    </div>
-	  </div>
-
-        </div>	
+    <div id="finalizeElements" data-bind="visible: editionFinished() == true" >
+       <button  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only accept-button" data-bind="click: $root.botondado">
+        <span class="ui-button-text" data-bind="text: $root.lang().saveRule"></span></button>
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only accept-button" data-bind="click: $root.cancelEdition">
+        <span class="ui-button-text" data-bind="text: $root.lang().cancelRule"></span></button>
     </div>
     <!-- FINALIZE -->
 
@@ -439,7 +367,7 @@
 
 <!-- CONTROL -->
 <!-- esto si que me interesa -->
-<div class="controlContainer">
+<div class="controlContainer" data-bind="visible: !editionFinished()">
     <div id="filterBtn" data-bind="visible: false">
     <a class="category" href="#" data-filter-by-category="true"> <span data-bind="text: lang().b2"></span> </a>
     </div>
@@ -462,7 +390,7 @@
 </div>
 
 <!-- DRAGGABLES -->
-<div class="dragContainer" data-bind="visible: page() < 2">
+<div class="dragContainer" data-bind="visible: !editionFinished()">
 <div id="leftArrow" data-bind="visible: existPagination()">
   <a class="prevBtn" href="">
     <img id="larrow" src="images/larrow.png" />
@@ -633,7 +561,7 @@
 
 
 <!-- RECOMMENDED CONTAINER -->
-<div class="recommended" data-bind="visible: page() == 1 && $root.viewData().length > 0">
+<div class="recommended" data-bind="visible: !editionFinished() && $root.viewData().length > 0">
   <div class="lines" id="recommendedLines" data-bind="visible: page() == 1 && status() == 1">
       <p class="recommendedText" data-bind="text: lang().recommended "></p>
   </div>
@@ -691,13 +619,25 @@
         <div data-bind="if: $root.helpText">
           <h1 data-bind="text: lang().m5b"></h1>
           <h2>1.-<span data-bind="text: $root.lang().k1"></h2><br>
+          <p>dfjksagsfjklgjkl</p>
           <!--
           <h2>2.-<span data-bind="text: $root.lang().k2"></h2><br>
           <h2>3.-<span data-bind="text: $root.lang().k3"></h2><br>
           <h2>4.-<span data-bind="text: $root.lang().k4"></h2><br>
         -->
         </div>
-        <!--OFFER DETAILS MODAL-->
+        <!--CHANNEL DETAILS MODAL-->
+        <div>
+          <h1><span data-bind="text: $root.lang().channelHelp1"></span></h1>
+          <div class="logoContainer">
+            <!-- ko if: $data.logo != undefined -->
+            <img class="defaultLogo" src="images/default.png" data-bind="attr: {src: $data.logo[0]()}"/>
+            <!-- /ko -->
+            <!-- ko if: $data.logo == undefined -->
+            <img class="defaultLogo" src="images/default.png"/>
+            <!-- /ko -->
+          </div>
+        </div>
         <div data-bind="foreach: offerDetails">
           <h1><span data-bind="text: $root.lang().b20"></h1>
           <div class="logoContainer">

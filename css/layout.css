@@ -1505,3 +1505,15 @@ height: 80px;
   margin: 5px;
   font-size: 1.2em;
 }
+
+.accept-button {
+  border: 3px solid #ccc;
+  border-radius: 10px 10px 10px 10px;
+  font-size: x-large;
+  font-family: "helvetica-neue-lt-std-35-thin";
+  font-weight: 200;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  color: #00B800;
+
+}

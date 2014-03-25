@@ -1,9 +1,0 @@
-BOTON DE LUPA:
-	en index, SELECT OPTION(~390): al pulsarlo ejecuta selectSearch en mvvm.js.
-	Esto llama a sammy, que redirige a /main/start
-
-Los candidatos se muestran con page() == 1
-
----------------------------------
-Que es self.currentSearch;
-Como funciona doSearch
